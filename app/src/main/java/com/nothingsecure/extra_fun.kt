@@ -203,11 +203,24 @@ fun force (context: Activity,  x: Float, y: Float, z: Float) {
 
 }
 
+/**
+ * Biometric or device credential. BIOMETRIC_WEAK rather than STRONG: none of the
+ * prompts in the app hand a CryptoObject to the biometric, they only gate the UI,
+ * so a Class 2 face unlock is as good as a Class 3 fingerprint here. It is also
+ * the only biometric | credential pairing androidx.biometric accepts on every API
+ * level. STRONG | DEVICE_CREDENTIAL is rejected outright on Android 9 and 10:
+ * canAuthenticate() answers BIOMETRIC_ERROR_UNSUPPORTED without looking at the
+ * device and PromptInfo.Builder.build() throws, which locked out phones that had
+ * a PIN and a fingerprint enrolled.
+ */
+const val ALLOWED_AUTHENTICATORS =
+    BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+
 fun promt (title: String = "Authenticate yourself"): BiometricPrompt.PromptInfo {
 
     return BiometricPrompt.PromptInfo.Builder().apply {
         setTitle(title)
-        setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_STRONG)
+        setAllowedAuthenticators(ALLOWED_AUTHENTICATORS)
         setConfirmationRequired(true)
     }
         .build()

@@ -102,7 +102,7 @@ class RegisterActivity : AppCompatActivity(), SensorEventListener {
         input_pass.isLongClickable = false
 
 
-        if (BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL) != BiometricManager.BIOMETRIC_SUCCESS) {
+        if (BiometricManager.from(this).canAuthenticate(ALLOWED_AUTHENTICATORS) != BiometricManager.BIOMETRIC_SUCCESS) {
             back_global.visibility = View.INVISIBLE
             bio_global.visibility = View.VISIBLE
             info_close.text = "You do not meet NothingK security requirements"
